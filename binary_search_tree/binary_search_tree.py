@@ -12,21 +12,60 @@ class BinarySearchTree:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+        if value < self.value:
+            if self.left is None:
+                self.left = BinarySearchTree(value)
+            else:
+                self.left.insert(value)
+        else:
+            if self.right is None:
+                self.right = BinarySearchTree(value)
+            else:
+                self.right.insert(value)
 
     # Return True if the tree contains the value
     # False if it does not
-    def contains(self, target):
-        pass
 
-    # Return the maximum value found in the tree
+    def contains(self, target):
+        # if less than self.value = self.left
+        # if greater than self.value = self.right
+        # if self.right and self.left are None
+        if self.value == target:
+            return True
+        elif target < self.value:
+            if self.left is None:
+                return False
+            else:
+                return self.left.contains(target)
+        else:
+            if self.right is None:
+                return False
+            else:
+                return self.right.contains(target)
+
     def get_max(self):
-        pass
+        while self.right is not None:
+            self = self.right
+        return self.value
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
+
     def for_each(self, cb):
-        pass
+
+        # print(self.value)
+        # if self.left is not None, cb
+        # if self.right is not None, cb
+        if self.right is None and self.left is None:
+            return cb(self.value)
+
+        cb(self.value)
+        if self.left is not None and self.right is not None:
+            return self.left.for_each(cb), self.right.for_each(cb)
+        elif self.right is not None:
+            return self.right.for_each(cb)
+        elif self.left is not None:
+            return self.left.for_each(cb)
 
     # DAY 2 Project -----------------------
 
