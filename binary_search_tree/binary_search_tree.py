@@ -68,21 +68,65 @@ class BinarySearchTree:
             return self.left.for_each(cb)
 
     # DAY 2 Project -----------------------
+    # DFT
+    # Initialize a stack
+    # Push root to stack
+    # While stack not empty
+    # Pop root out of stack into temp
+    # If temp has right put into stack
+    # If temp has left put into stack
+
+    # BFT
+    # Initialize a queue
+    # Push root to queue
+    # While queue not empty
+    # Pop root out of queue into temp
+    # If temp has right put into queue
+    # If temp has left put into queue
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self, node):
-        pass
+        if node is None:
+            return
+
+        else:
+            self.in_order_print(node.left)
+            print(node.value)
+
+            self.in_order_print(node.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
+
     def bft_print(self, node):
-        pass
+        queue = Queue()
+        queue.enqueue(node)
+
+        while queue.len() > 0:
+            temp = queue.dequeue()
+            print(temp.value)
+
+            if temp.left:
+                queue.enqueue(temp.left)
+
+            if temp.right:
+                queue.enqueue(temp.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        stack = Stack()
+        stack.push(node)
+        while stack.len() > 0:
+            stack.pop()
+            print(node.value)
+            if node.right and node.left:
+                node.dft_print(node.right), node.dft_print(node.left)
+            elif node.right:
+                node.dft_print(node.right)
+            elif node.left:
+                node.dft_print(node.left)
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
