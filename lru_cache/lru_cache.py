@@ -65,6 +65,7 @@ class LRUCache:
             self.storage.remove_from_head()
             # remove LRU item from cache
             del self.cache[temp]
+            self.size -= 1
 
         # adding entry to dll
         self.storage.add_to_tail(value)
