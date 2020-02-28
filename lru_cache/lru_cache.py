@@ -14,7 +14,9 @@ class LRUCache:
 
     def __init__(self, limit=10):
         self.limit = limit
+        self.size = 0
         self.storage = DoublyLinkedList()
+        self.cache = {}
 
     """
     Retrieves the value associated with the given key. Also
@@ -25,10 +27,10 @@ class LRUCache:
     """
 
     def get(self, key):
-        if self.storage.__len__() > 0:
-            (cur_node, val) = self.storage.get_value(key)
-            self.storage.move_to_end(cur_node)
-            return val
+        if key in self.cache:
+            node = self.cache[key]
+            self.storage.move_to_end(node)
+            return node.value
         else:
             return None
     """
@@ -44,12 +46,47 @@ class LRUCache:
 
     def set(self, key, value):
         entry = {key: value}
+        [k] = entry.keys()
 
-        if self.storage.__len__() < self.limit:
-            self.storage.add_to_tail(entry)
-        else:
-            if self.storage.check_dll_to_update(key, value) == True:
-                self.storage.check_dll_to_update(key, value)
-            else:
-                self.storage.remove_from_head()
-                self.storage.add_to_tail(entry)
+        # check for key in cache
+        if k in self.cache:
+            # if in cache, update the current value
+            self.storage.add_to_tail(value)
+            self.cache[k] = self.storage.tail
+
+        # if cache is full
+        if self.size == self.limit:
+            # remove LRU node from dll
+            temp = ''
+            for ke, va in self.cache.items():
+                if va.value == self.storage.head.value:
+                    temp = ke
+
+            self.storage.remove_from_head()
+            # remove LRU item from cache
+            del self.cache[temp]
+
+        # adding entry to dll
+        self.storage.add_to_tail(value)
+        # assigning newest node to cache
+        self.cache[k] = self.storage.tail
+        # incrementing size of cache
+        self.size += 1
+
+        # for j, k in self.cache.items():
+        #     print(j, k.value, 'after')
+
+        # if key in self.cache:
+        #     node = self.cache[key]
+        #     node.value = (key, value)
+        #     self.storage.move_to_end(node)
+        #     return
+
+        # if self.size == self.limit:
+        #     del self.cache[self.storage.head.value[0]]
+        #     self.storage.remove_from_head()
+        #     self.size -= 1
+
+        # self.storage.add_to_tail((key, value))
+        # self.cache[key] = self.storage.tail
+        # self.size += 1
